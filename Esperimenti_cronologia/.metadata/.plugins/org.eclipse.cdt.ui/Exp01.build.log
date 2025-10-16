@@ -1,0 +1,10 @@
+10:26:05 **** Incremental Build of configuration Debug for project Exp01 ****
+make -j7 all 
+arm-none-eabi-size  Exp01.elf 
+   text	   data	    bss	    dec	    hex	filename
+  34728	     96	   2672	  37496	   9278	Exp01.elf
+Finished building: default.size.stdout
+ 
+
+10:26:05 Build Finished. 0 errors, 0 warnings. (took 269ms)
+
