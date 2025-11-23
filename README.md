@@ -1,93 +1,136 @@
-# ⚡ Electronics Laboratory - STM32 Projects & Serial Communication
+# ⚡ Electronics Laboratory: STM32 Firmware & Python Serial Interface
 
-Welcome to the **Electronics Laboratory** repository. This project contains the firmware source code and host-side scripts developed for the laboratory experiments using **STM32H Series** microcontrollers (e.g., STM32H7/H5 Nucleo boards).
+Welcome to the **Electronics Laboratory** repository. This project contains the complete source code, documentation, and tools for laboratory experiments performed using **STM32H Series** microcontrollers (specifically STM32H7/H5 Nucleo boards).
 
-The repository is divided into two main parts:
-1.  **Firmware (C/C++):** Projects developed in **STM32CubeIDE** utilizing the HAL library.
-2.  **Host Software (Python):** Scripts for **Serial (UART) communication**, data acquisition, and real-time visualization.
+The repository bridges the gap between low-level embedded C programming and high-level Python scripting, featuring firmware for the MCU and host-side scripts for data acquisition, control, and real-time visualization via **UART (Serial Communication)**.
 
 ---
 
 ## 📂 Repository Structure
 
+The project is organized into two main directories to distinguish between the embedded firmware and the PC-side software.
+
 ```text
-├── Firmware/                 # STM32CubeIDE Projects (C Source Code)
-│   ├── Lab1_GPIO/            # Digital I/O experiments
-│   ├── Lab2_ADC_PWM/         # Analog reading and signal generation
-│   ├── Lab3_SerialCom/       # UART implementation
+├── Firmware/                 # STM32CubeIDE Projects (C/C++ Source Code)
+│   ├── Lab_GPIO/             # Basic Digital I/O and Interrupt experiments
+│   ├── Lab_ADC_DMA/          # Analog signal acquisition using DMA
+│   ├── Lab_UART/             # Serial communication implementation
 │   └── Drivers/              # STM32 HAL Drivers and CMSIS
 │
-├── Python_Scripts/           # Host-side scripts
-│   ├── data_logger.py        # Script to save serial data to CSV
-│   ├── real_time_plot.py     # Live plotting of incoming data
-│   └── serial_control.py     # Send commands to the STM32
+├── Python_Host/              # PC-side Scripts for Control & Analysis
+│   ├── requirements.txt      # List of Python dependencies
+│   ├── serial_reader.py      # Basic script to read raw serial data
+│   ├── data_logger.py        # Saves incoming data to CSV/TXT files
+│   └── realtime_plot.py      # Live visualization of sensor data
 │
-└── README.md                 # This documentation
+├── Schematics/               # Circuit diagrams and pinout configurations
+└── README.md                 # Project Documentation
+```
+
+---
 
 ## 🛠️ Hardware Requirements
-To replicate these experiments, you will need:
 
-Microcontroller: STM32H Series Nucleo / Discovery Board (e.g., STM32H743ZI).
-Connection: USB Cable (Micro-USB or USB-C depending on the board) for programming and UART communication.
-Components: Breadboard, Jumper wires, Resistors, LEDs, Sensors (as per specific lab instructions).
+To replicate these experiments, the following hardware is required:
+
+*   **Microcontroller:** STM32H Series Nucleo Board (e.g., NUCLEO-H743ZI, NUCLEO-H563ZI).
+*   **Connection:** USB Cable (Type-C or Micro-USB) for ST-LINK programming and UART communication.
+*   **Components:** Breadboards, Oscilloscope, Signal Generator, and specific components (Resistors, Capacitors, Op-Amps, Sensors) as defined in each lab folder.
+
+---
 
 ## 💻 Software Prerequisites
 
-1. For Firmware (STM32)
-STM32CubeIDE: Download here.
-Drivers: ST-LINK USB drivers (usually installed with CubeIDE).
-Terminal (Optional): PuTTY or TeraTerm for raw debugging.
-2. For Host Scripts (Python)
-Python 3.8+: Ensure Python is added to your system PATH.
-Libraries: You need pyserial for communication and matplotlib/pandas for data handling.
-Install the required Python packages using:
+### 1. Embedded Development (Firmware)
+*   **STM32CubeIDE:** [Download here](https://www.st.com/en/development-tools/stm32cubeide.html).
+*   **ST-LINK Drivers:** Usually installed automatically with CubeIDE.
+*   **Terminal Emulator:** (Optional) PuTTY, TeraTerm, or Minicom for raw debugging.
 
-code
-Bash
+### 2. PC Control (Python)
+*   **Python 3.8+**: Ensure Python is installed and added to your system PATH.
+*   **Libraries:** The scripts rely on `pyserial` for communication and scientific libraries for plotting.
+
+To install the necessary Python dependencies, run:
+
+```bash
 pip install pyserial matplotlib pandas numpy
+```
+
+---
 
 ## 🚀 Getting Started
 
-Part A: Flashing the Firmware
-Clone the Repository:
-code
-Bash
-git clone https://github.com/[YOUR_USERNAME]/[REPO_NAME].git
-Open STM32CubeIDE.
-Go to File > Import > General > Existing Projects into Workspace.
-Select the Firmware/ directory from this repo.
-Build the project (Hammer icon) and Run/Debug (Green Play button) to flash the code onto the board.
-Part B: Running Python Serial Scripts
-Once the board is flashing and connected via USB:
+### Part A: Flashing the Firmware (STM32)
 
-Identify the COM Port (Windows) or /dev/tty (Linux/Mac) assigned to the STM32.
-Windows: Check Device Manager -> Ports (COM & LPT).
-Linux: Run ls /dev/ttyACM*.
-Navigate to the script folder:
-code
-Bash
-cd Python_Scripts
-Run the desired script (example):
-code
-Bash
-python real_time_plot.py --port COM3 --baud 115200
-⚠️ Note on Baud Rate: Ensure the baud rate in the Python script matches the huart.Init.BaudRate configured in the STM32 C code (default is usually 115200 or 9600).
-📡 Serial Communication Protocol
-The communication between the STM32 and Python follows a specific format (modify this section based on your actual code):
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/[YOUR_USERNAME]/[REPO_NAME].git
+    ```
+2.  Open **STM32CubeIDE**.
+3.  Navigate to `File > Import > General > Existing Projects into Workspace`.
+4.  Browse and select the specific project folder inside the `Firmware/` directory.
+5.  **Build** the project (Hammer icon 🔨).
+6.  **Run/Debug** (Green Play button ▶️) to flash the code onto the board.
 
-Data Format: ASCII Strings or Binary Packets.
-End of Line: \n (Newline) or \r\n.
-Example Output from STM32:
-code
-Text
-DATA,1234,3.3V
-Example Command to STM32:
-Send '1' -> Turn LED ON.
-Send '0' -> Turn LED OFF.
+### Part B: Running the Python Interface
+
+Once the board is flashed and connected via USB, the STM32 will act as a Virtual COM Port.
+
+1.  **Identify the Port:**
+    *   **Windows:** Open Device Manager → Ports (COM & LPT) → Look for "STMicroelectronics STLink Virtual COM Port" (e.g., `COM3`).
+    *   **Linux/Mac:** Run `ls /dev/tty.*` in the terminal (usually `/dev/ttyACM0` or `/dev/tty.usbmodem...`).
+
+2.  **Run a Script:**
+    Navigate to the Python folder and run a script.
+
+    *Example: Real-time Plotting*
+    ```bash
+    cd Python_Host
+    python realtime_plot.py
+    ```
+    *(Note: You may need to edit the `COM_PORT` variable inside the script to match your computer).*
+
+---
+
+## 📡 Communication Protocol Details
+
+The communication relies on **UART** (Asynchronous Serial).
+
+*   **Baud Rate:** `115200` (Default) or `9600` (Always check `main.c` -> `huart.Init.BaudRate`).
+*   **Data Bits:** 8
+*   **Parity:** None
+*   **Stop Bits:** 1
+
+> **⚠️ CRITICAL:** The Baud Rate in the Python script **MUST** match the Baud Rate configured in the STM32 Firmware. If they do not match, you will see garbage characters.
+
+### Data Format Example
+The STM32 typically sends data strings terminated by a newline character (`\n`) for easy parsing:
+
+```text
+TIMESTAMP,SENSOR_VALUE,VOLTAGE
+1001,4095,3.30
+1002,2048,1.65
+```
+
+---
+
 ## 🐛 Troubleshooting
-"Access Denied" Error (Python): Close any other serial monitors (like the console inside STM32CubeIDE) before running the Python script. Only one program can use the COM port at a time.
-No Data Received: Check if the TX/RX jumper pins on the Nucleo board are connected correctly.
-Garbage Characters: Verify that the Baud Rate is identical on both the STM32 code and the Python script.
-👥 Authors & Contributors
-[Your Name] - Firmware & Python Development
-[Teammate Name] - Hardware Setup & Testing
+
+*   **Error: `Access is denied` (Python):**
+    *   Make sure you don't have the Serial Monitor open inside STM32CubeIDE, PuTTY, or another terminal. Only one program can access the COM port at a time.
+*   **No Data Received:**
+    *   Check physical connections (TX/RX jumpers on the Nucleo board, if modified).
+    *   Reset the board (Black button) after starting the Python script.
+*   **Garbage/Random Characters:**
+    *   This is almost always a **Baud Rate mismatch**. Check the `main.c` file and ensure the Python script uses the exact same speed (e.g., 115200).
+
+---
+
+## 👥 Authors
+
+*   **[Your Name]** - *Firmware & Python Development*
+*   **[Collaborator Name]** - *Hardware Testing*
+
+---
+*Project developed for the Electronics Laboratory Course - [University Name / Year]*
+```
