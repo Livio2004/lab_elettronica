@@ -128,9 +128,8 @@ TIMESTAMP,SENSOR_VALUE,VOLTAGE
 
 ## 👥 Authors
 
-*   **[Your Name]** - *Firmware & Python Development*
-*   **[Collaborator Name]** - *Hardware Testing*
+*   **[Livio Lando]** - *Firmware & Python Development*
+*   **[Davide Pievaioli]** - *Hardware Testing*
 
 ---
-*Project developed for the Electronics Laboratory Course - [University Name / Year]*
-```
+*Project developed for the Electronics Laboratory Course - [Bicocca university / 2025]*
